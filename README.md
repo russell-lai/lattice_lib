@@ -4,8 +4,8 @@ An assortment of Sage code for lattice-based cryptography.
 
 ## How to use
 
-- Clone lattice_lib to <project>/lattice_lib.
-- In <project>, create a file called lattice_lib.py with the following content (for example):
+- Clone `lattice_lib` to `<project>/lattice_lib`.
+- In `<project>`, create a file called lattice_lib.py with the following content (for example):
 ```python
 import sys
 sys.path.append('lattice_lib')
