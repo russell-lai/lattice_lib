@@ -4,32 +4,46 @@ from sage.all import *
 from util import *
 var('z')
 
-def smallest_norm(f, print_ideals = False, verbose = False):
+def smallest_norm(f, print_ideals = False, verbose = False, method = 'multiplicative_order'):
     # Input: conductor f
     # Output: the smallest ideal norm r in the f-th cyclotomic field. 
     # If print_ideals = True, output also the ideals of norm r. 
     # If verbose = True, more information is printed during the computation. 
-    # Note: Slow for f > 200
+    # If method = 'multiplicative_order' (default), the method of computing the multiplicative order of primes modulo the coprime part of the conductor f is used.
+    # If method = 'zeta', the method of computing the coefficients of the Dedekind zeta function is used. (Slow for f > 200)
+    
     assert f > 1
-    phi = euler_phi(f)
-    K = CyclotomicField(f)
-    p = K.next_split_prime()
-    if verbose:
-        print("Smallest fully splitting prime is {}.".format(p))
-    zeta_coeffs = list(K.zeta_coefficients(p))
-    if verbose:
-        print("The first {} coefficients of the Dedekind zeta function are {}.".format(p, zeta_coeffs))
-    r = 2
-    while zeta_coeffs[r-1] == 0:
-        r += 1
-    # the smallest ideal is of norm r
 
-    assert is_prime_power(r)
-    if print_ideals:
-        ideal_factorisation = K.ideal(prime_divisors(r)[0]).factor()
-        return r, [[ideal, multiplicity] for ideal, multiplicity in ideal_factorisation]
-    else:
-        return r
+    if method == 'zeta':
+        phi = euler_phi(f)
+        K = CyclotomicField(f)
+        p = K.next_split_prime()
+        if verbose:
+            print("Smallest fully splitting prime is {}.".format(p))
+        zeta_coeffs = list(K.zeta_coefficients(p))
+        if verbose:
+            print("The first {} coefficients of the Dedekind zeta function are {}.".format(p, zeta_coeffs))
+        r = 2
+        while zeta_coeffs[r-1] == 0:
+            r += 1
+        # the smallest ideal is of norm r
+    
+        assert is_prime_power(r)
+        if print_ideals:
+            ideal_factorisation = K.ideal(prime_divisors(r)[0]).factor()
+            return r, [[ideal, multiplicity] for ideal, multiplicity in ideal_factorisation]
+        else:
+            return r
+            
+    if method == 'multiplicative_order':
+        p = 1
+        current_low = Infinity
+        while p <= current_low:
+            p = next_prime(p)
+            candidate = p**multiplicative_order(mod(p,ZZ(f).prime_to_m_part(p)))
+            if candidate < current_low:
+                current_low = candidate
+        return current_low
 
 def subtractive_set(f):
     # Input: Conductor f
