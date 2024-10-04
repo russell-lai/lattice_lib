@@ -45,27 +45,32 @@ def smallest_norm(f, print_ideals = False, verbose = False, method = 'multiplica
                 current_low = candidate
         return current_low
 
-def subtractive_set(f):
+def subtractive_set(f, non_zero = False):
     # Input: Conductor f
     # Output: Subtractive set over the f-th cyclotomic ring
     if is_prime_power(f):
-        return subtractive_set_prime_power(f)
+        return subtractive_set_prime_power(f, non_zero)
     else:
         return subtractive_set_non_prime_power(f)
 
-def subtractive_set_prime_power(f):
+def subtractive_set_prime_power(f, non_zero = False):
     ## Input: Prime-power conductor f
     ## Output: Set C containing elements of the form (z**i-1)/(z-1) with i ranging from 0 to phi(rad(f))-1
     f_max = max_prime_power_divisor(f)
-    K = CyclotomicField(f, 'z')
-    C = [(z**i-1)/(z-1) for i in range(euler_phi(radical(f)))]
+    K = CyclotomicField(f)
+    z = K.gen()
+    if non_zero:
+        C = [(z**i-1)/(z-1) for i in range(1,euler_phi(radical(f)))]
+    else:
+        C = [(z**i-1)/(z-1) for i in range(euler_phi(radical(f)))]
     return C
 
 def subtractive_set_non_prime_power(f):
     ## Input: Non-prime-power conductor f
     ## Output: Set C containing first f/f_max roots of unity, where f_max is the maximum prime-power divisor of f 
     f_max = max_prime_power_divisor(f)
-    K = CyclotomicField(f, 'z')
+    K = CyclotomicField(f)
+    z = K.gen()
     C = [z**i for i in range(f/f_max)]
     return C
 
