@@ -13,3 +13,7 @@ from twisted_trace import *         # Tools related to twisted trace
 from circulant_rep import *         # Tools related to circulant representations of cyclotomic elements
 ```
 - Use `from lattice_lib import *` to import the library.
+
+# License
+
+The library is licensed under the `LGPLv3+ <https://www.gnu.org/licenses/lgpl-3.0.en.html>`__ license.
