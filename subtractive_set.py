@@ -1,7 +1,7 @@
 # Tools related to subtractive sets
 
 from sage.all import *
-from util import *
+from .util import *
 var('z')
 
 def smallest_norm(f, print_ideals = False, verbose = False, method = 'multiplicative_order'):

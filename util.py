@@ -1,6 +1,7 @@
 # General utility functions
 
 from sage.all import *
+_sage_const_2 = Integer(2); _sage_const_1 = Integer(1)
 
 def next_power_two(x):
     # Input: integer x
@@ -42,3 +43,9 @@ def is_local_signed_perm(A,B,chunk_size):
     A_abs_blocks.sort()
     B_abs_blocks.sort()
     return A_abs_blocks == B_abs_blocks
+
+def BalanceInterval(q):
+    if is_even(q):
+        return -q/_sage_const_2 +_sage_const_1 , q/_sage_const_2 
+    else:
+        return ceil(-q/_sage_const_2 ), floor(q/_sage_const_2 )
