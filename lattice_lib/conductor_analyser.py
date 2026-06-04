@@ -1,11 +1,25 @@
 # Tool for analysing conductors
 
 from sage.all import *
+from .util import *   # next_power_two, prime_power_divisors, max_prime_power_divisor
 import csv
 
 def analyse(f):
-    # Input: conductor f
-    # Output: information of interest about conductor f
+    """Compute a row of summary information about the conductor ``f``.
+
+    Returns a list whose columns match the header produced by
+    :func:`gen_conductor_table`: conductor ``f``, number of distinct prime
+    factors, smoothness (largest prime factor), power-smoothness (largest
+    prime-power factor), degree ``phi(f)``, twist degree, twist packing ratio,
+    subtractive-set size, next power of two above the degree, the ratios
+    subtractive-set-size / degree and degree / next-power-of-two, the
+    factorisation, the conductor type (one of ``"prime"``, ``"prime-power"``,
+    ``"non-prime-power"``), and any extra attribute tags.
+
+    The twist degree and packing ratio are only computed for power-of-two and
+    squarefree-odd-part conductors. For other conductors (for example odd
+    non-squarefree ones) both are returned as ``None``.
+    """
     phi = euler_phi(f)
     pmax = max(prime_divisors(f))
     fmax = max(prime_power_divisors(f))
@@ -52,7 +66,12 @@ def analyse(f):
         ]
 
 def gen_conductor_table(bound = 2**15+1):
-    # Generate a file conductors.csv recording information about conductors from 2 to bound (default = 2**15+1).
+    """Write ``conductors.csv`` with one :func:`analyse` row per conductor.
+
+    Tabulates conductors from 2 up to ``bound`` (default ``2**15 + 1``) and
+    writes the result, with a header row, to ``conductors.csv`` in the current
+    directory.
+    """
     results = [[
         "conductor", 
         "#prime factors",

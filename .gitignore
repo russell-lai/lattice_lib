@@ -1,3 +1,5 @@
-*.cpython-312.pyc
-*.cpython-313.pyc
+__pycache__/
+*.pyc
 *-checkpoint.py
+.ipynb_checkpoints/
+conductors.csv
